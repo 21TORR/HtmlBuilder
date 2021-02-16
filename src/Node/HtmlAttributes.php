@@ -4,6 +4,7 @@ namespace Torr\HtmlBuilder\Node;
 
 use Torr\HtmlBuilder\Exception\InvalidAttributeNameException;
 use Torr\HtmlBuilder\Exception\InvalidAttributeValueException;
+use Torr\HtmlBuilder\Exception\UnexpectedTypeException;
 
 final class HtmlAttributes
 {
@@ -82,5 +83,26 @@ final class HtmlAttributes
 		return "" !== $name
 			? !\preg_match('~[ \\x{0000}-\\x{001F}\\x{0080}-\\x{009F}"\'<>/=]~u', $name)
 			: false;
+	}
+
+	/**
+	 * @param self|array $value
+	 */
+	public static function fromValue ($value) : self
+	{
+		if ($value instanceof self)
+		{
+			return $value;
+		}
+
+		if (\is_array($value))
+		{
+			return new self($value);
+		}
+
+		throw new UnexpectedTypeException(\sprintf(
+			"Can't create attributes from value of type '%s'",
+			\is_object($value) ? \get_class($value) : \gettype($value)
+		));
 	}
 }

@@ -5,6 +5,7 @@ namespace Tests\Torr\HtmlBuilder\Node;
 use PHPUnit\Framework\TestCase;
 use Torr\HtmlBuilder\Exception\InvalidAttributeNameException;
 use Torr\HtmlBuilder\Exception\InvalidAttributeValueException;
+use Torr\HtmlBuilder\Exception\UnexpectedTypeException;
 use Torr\HtmlBuilder\Node\HtmlAttributes;
 
 final class HtmlAttributesTest extends TestCase
@@ -66,5 +67,44 @@ final class HtmlAttributesTest extends TestCase
 	{
 		$this->expectException(InvalidAttributeValueException::class);
 		new HtmlAttributes(["a" => new \stdClass()]);
+	}
+
+
+	/**
+	 */
+	public function provideFromValue () : iterable
+	{
+		yield [[], []];
+		yield [["a" => 1], ["a" => 1]];
+		yield [new HtmlAttributes(["a" => 1]), ["a" => 1]];
+	}
+
+	/**
+	 * @dataProvider provideFromValue
+	 */
+	public function testFromValue ($value, array $expected) : void
+	{
+		$attrs = HtmlAttributes::fromValue($value);
+		self::assertEqualsCanonicalizing($expected, $attrs->all());
+	}
+
+
+	/**
+	 */
+	public function provideFromValueInvalid () : iterable
+	{
+		yield [null];
+		yield [false];
+		yield [1];
+		yield ["test"];
+	}
+
+	/**
+	 * @dataProvider provideFromValueInvalid
+	 */
+	public function testFromValueInvalid ($value) : void
+	{
+		$this->expectException(UnexpectedTypeException::class);
+		HtmlAttributes::fromValue($value);
 	}
 }
