@@ -65,6 +65,8 @@ final class HtmlBuilder
 
 	/**
 	 * Builds the content
+	 *
+	 * @param SafeMarkup|HtmlElement|scalar|null $content
 	 */
 	private function buildContent ($content) : string
 	{
