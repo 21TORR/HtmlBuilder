@@ -32,7 +32,7 @@ final class HtmlElement
 	private array $content = [];
 
 	/**
-	 * @param HtmlAttributes|array $attributes
+	 * @param HtmlAttributes|array               $attributes
 	 * @param Array<self|SafeMarkup|scalar|null> $content
 	 */
 	public function __construct (string $tagName, $attributes = [], array $content = [])

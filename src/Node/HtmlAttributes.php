@@ -52,6 +52,7 @@ final class HtmlAttributes
 	 * Returns an attribute value
 	 *
 	 * @param scalar|null $defaultValue
+	 *
 	 * @return scalar|null
 	 */
 	public function get (string $name, $defaultValue = null)
