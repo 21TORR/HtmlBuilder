@@ -80,7 +80,8 @@ final class HtmlElement
 
 
 	/**
-	 * @param scalar|null|self|SafeMarkup $value
+	 * @param scalar|self|SafeMarkup|null $value
+	 *
 	 * @return $this
 	 */
 	public function append ($value) : self

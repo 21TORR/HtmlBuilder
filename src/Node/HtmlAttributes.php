@@ -23,6 +23,7 @@ final class HtmlAttributes
 	 * Sets an attribute value
 	 *
 	 * @param scalar $value
+	 *
 	 * @return $this
 	 */
 	public function set (string $name, $value) : self
@@ -76,7 +77,7 @@ final class HtmlAttributes
 	/**
 	 * Validates an HTML attribute name
 	 *
-	 * @link https://www.w3.org/TR/html5/syntax.html#elements-attributes
+	 * @see https://www.w3.org/TR/html5/syntax.html#elements-attributes
 	 */
 	private function isValidName (string $name) : bool
 	{
