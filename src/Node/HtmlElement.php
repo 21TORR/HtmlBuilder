@@ -72,6 +72,14 @@ final class HtmlElement
 	}
 
 	/**
+	 */
+	public function isEmpty () : bool
+	{
+		return $this->empty;
+	}
+
+
+	/**
 	 * @param scalar|null|self|SafeMarkup $value
 	 * @return $this
 	 */

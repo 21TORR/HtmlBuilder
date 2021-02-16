@@ -90,10 +90,6 @@ final class HtmlElementTest extends TestCase
 		}
 
 		$element = new HtmlElement($tagName, [], ["test"]);
-
-		if (!$shouldBeEmpty)
-		{
-			self::assertInstanceOf(HtmlElement::class, $element);
-		}
+		self::assertSame($shouldBeEmpty, $element->isEmpty());
 	}
 }
