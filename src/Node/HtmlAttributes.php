@@ -6,10 +6,12 @@ use Torr\HtmlBuilder\Exception\InvalidAttributeNameException;
 
 final class HtmlAttributes
 {
+	/** @var array<string, string|bool> */
 	private array $attributes = [];
 	private ClassList $classList;
 
 	/**
+	 * @param array<string, string|null> $attributes
 	 */
 	public function __construct (array $attributes = [])
 	{
@@ -27,7 +29,10 @@ final class HtmlAttributes
 	 *
 	 * @return $this
 	 */
-	public function set (string $name, int|float|string|bool|null $value) : self
+	public function set (
+		string $name,
+		int|float|string|bool|null $value,
+	) : self
 	{
 		if (!$this->isValidName($name))
 		{
@@ -37,26 +42,41 @@ final class HtmlAttributes
 			));
 		}
 
+		// special handling for classes
 		if ("class" === $name)
 		{
 			$this->classList = new ClassList((string) $value);
 		}
 
+		// special handling for null + bools
+		$value = match ($value)
+		{
+			true, false, null => $value,
+			default => (string) $value,
+		};
+
+
 		$this->attributes[$name] = $value;
+
+		if (null === $value)
+		{
+			// remove empty values
+			$this->attributes = \array_filter(
+				$this->attributes,
+				static fn (?string $value) => null !== $value,
+			);
+		}
+
 		return $this;
 	}
 
 	/**
 	 * Returns an attribute value
-	 *
-	 * @param scalar|null $defaultValue
-	 *
-	 * @return scalar|null
 	 */
 	public function get (
 		string $name,
-		int|float|string|bool|null $defaultValue = null,
-	) : int|float|string|bool|null
+		string|bool|null $defaultValue = null,
+	) : string|bool|null
 	{
 		if ("class" === $name)
 		{
@@ -85,6 +105,8 @@ final class HtmlAttributes
 
 	/**
 	 * Returns all attributes.
+	 *
+	 * @return array<string, string>
 	 */
 	public function all () : array
 	{

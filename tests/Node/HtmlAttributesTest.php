@@ -12,9 +12,9 @@ final class HtmlAttributesTest extends TestCase
 	 */
 	public function testAll ()
 	{
-		$attr = new HtmlAttributes(["a" => 1]);
+		$attr = new HtmlAttributes(["a" => "1"]);
 
-		self::assertEquals(["a" => 1], $attr->all());
+		self::assertEquals(["a" => "1"], $attr->all());
 
 		$attr
 			->set("b", 2)
@@ -26,21 +26,21 @@ final class HtmlAttributesTest extends TestCase
 	 */
 	public function testDefaultValue ()
 	{
-		$attr = new HtmlAttributes(["a" => null]);
+		$attr = new HtmlAttributes(["a" => true]);
 
 		self::assertNull($attr->get("missing"));
-		self::assertSame(5, $attr->get("missing", 5));
+		self::assertSame("5", $attr->get("missing", "5"));
 
-		self::assertNull($attr->get("a"));
+		self::assertTrue($attr->get("a"));
 		// should keep stored value
-		self::assertNull($attr->get("a", "5"));
+		self::assertTrue($attr->get("a", "5"));
 	}
 
 	public function testSetAndGet ()
 	{
 		$attr = new HtmlAttributes(["a" => 1]);
 
-		self::assertSame(1, $attr->get("a"));
+		self::assertSame("1", $attr->get("a"));
 
 		$attr->set("a", "test");
 		self::assertSame("test", $attr->get("a"));
