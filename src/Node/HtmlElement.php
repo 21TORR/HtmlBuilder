@@ -4,7 +4,6 @@ namespace Torr\HtmlBuilder\Node;
 
 use Torr\HtmlBuilder\Exception\InvalidTagNameException;
 use Torr\HtmlBuilder\Exception\NoContentAllowedException;
-use Torr\HtmlBuilder\Exception\UnexpectedTypeException;
 use Torr\HtmlBuilder\Text\SafeMarkup;
 
 final class HtmlElement
@@ -32,10 +31,13 @@ final class HtmlElement
 	private array $content = [];
 
 	/**
-	 * @param HtmlAttributes|array               $attributes
-	 * @param Array<self|SafeMarkup|scalar|null> $content
+	 * @param array<self|SafeMarkup|scalar|null> $content
 	 */
-	public function __construct (string $tagName, $attributes = [], array $content = [])
+	public function __construct (
+		string $tagName,
+		HtmlAttributes|array $attributes = [],
+		array $content = [],
+	)
 	{
 		if (!$this->isValidName($tagName))
 		{
@@ -80,19 +82,27 @@ final class HtmlElement
 		return $this->empty;
 	}
 
+	/**
+	 */
+	public function getClassList () : ClassList
+	{
+		return $this->attributes->getClassList();
+	}
 
 	/**
 	 * @param scalar|self|SafeMarkup|null $value
 	 *
 	 * @return $this
 	 */
-	public function append ($value) : self
+	public function append (
+		int|float|string|bool|null|self|SafeMarkup $value,
+	) : self
 	{
 		if ($this->empty)
 		{
 			throw new NoContentAllowedException(\sprintf(
 				"Elements of type '%s' can't have content.",
-				$this->tagName
+				$this->tagName,
 			));
 		}
 
@@ -108,21 +118,13 @@ final class HtmlElement
 			return $this;
 		}
 
-		if ($value instanceof self || $value instanceof SafeMarkup)
-		{
-			$this->content[] = $value;
-			return $this;
-		}
-
-		throw new UnexpectedTypeException(\sprintf(
-			"Can't add content of type '%s', only allowed are scalars, null, SafeMarkup and HtmlElement.",
-			\is_object($value) ? \get_class($value) : \gettype($value)
-		));
+		$this->content[] = $value;
+		return $this;
 	}
 
 
 	/**
-	 * Returns whether the an element with the given tag name is empty
+	 * Returns whether an element with the given tag name is empty
 	 */
 	public static function isEmptyElement (string $tagName) : bool
 	{

@@ -65,10 +65,10 @@ final class HtmlBuilder
 
 	/**
 	 * Builds the content
-	 *
-	 * @param SafeMarkup|HtmlElement|scalar|null $content
 	 */
-	private function buildContent ($content) : string
+	private function buildContent (
+		SafeMarkup|float|HtmlElement|bool|int|string|null $content,
+	) : string
 	{
 		if ($content instanceof SafeMarkup)
 		{

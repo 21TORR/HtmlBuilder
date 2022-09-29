@@ -31,7 +31,8 @@ final class HtmlBuilderTest extends TestCase
 					"c" => true,
 					"d" => false,
 					"e" => null,
-					"f" => "final"
+					"f" => "final",
+					"class" => "test  abc ",
 				],
 				[
 					"test ",
@@ -43,7 +44,7 @@ final class HtmlBuilderTest extends TestCase
 					" ←",
 				]
 			),
-			'<div a="test" b="asdas\'asd" c f="final">test 123 &lt;b&gt;b&lt;/b&gt; <strong>strong</strong> an element → <img src="123"> ←</div>',
+			'<div a="test" b="asdas\'asd" c f="final" class="test abc">test 123 &lt;b&gt;b&lt;/b&gt; <strong>strong</strong> an element → <img src="123"> ←</div>',
 		];
 	}
 
