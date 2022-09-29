@@ -63,7 +63,7 @@ final class HtmlAttributes
 			// remove empty values
 			$this->attributes = \array_filter(
 				$this->attributes,
-				static fn (?string $value) => null !== $value,
+				static fn (mixed $value) => null !== $value,
 			);
 		}
 
@@ -106,7 +106,7 @@ final class HtmlAttributes
 	/**
 	 * Returns all attributes.
 	 *
-	 * @return array<string, string>
+	 * @return array<string, string|true|false|null>
 	 */
 	public function all () : array
 	{
