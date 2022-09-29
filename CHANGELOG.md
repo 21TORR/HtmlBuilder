@@ -1,3 +1,9 @@
+1.1.0
+=====
+
+* (feature) Add `ClassList` and `HtmlElement::getClassList()`.
+
+
 1.0.0
 =====
 
