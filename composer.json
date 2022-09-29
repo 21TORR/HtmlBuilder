@@ -1,33 +1,22 @@
 {
 	"name": "21torr/html-builder",
-	"type": "library",
 	"description": "Helper classes to simply and reliably build HTML in PHP.",
-	"homepage": "https://github.com/21TORR/html-builder",
 	"license": "MIT",
+	"type": "library",
 	"authors": [
 		{
 			"name": "21TORR",
 			"homepage": "https://www.21torr.com/"
 		}
 	],
+	"homepage": "https://github.com/21TORR/html-builder",
 	"require": {
 		"php": "^8.1"
 	},
 	"require-dev": {
-		"bamarni/composer-bin-plugin": "^1.4",
+		"bamarni/composer-bin-plugin": "^1.8.1",
 		"phpunit/phpunit": "^9.5",
 		"symfony/phpunit-bridge": "^5.2"
-	},
-	"config": {
-		"sort-packages": true,
-		"allow-plugins": {
-			"bamarni/composer-bin-plugin": true
-		}
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-next": "1.x-dev"
-		}
 	},
 	"autoload": {
 		"psr-4": {
@@ -37,6 +26,17 @@
 	"autoload-dev": {
 		"psr-4": {
 			"Tests\\Torr\\HtmlBuilder\\": "tests/"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"bamarni/composer-bin-plugin": true
+		},
+		"sort-packages": true
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-next": "1.x-dev"
 		}
 	},
 	"scripts": {
