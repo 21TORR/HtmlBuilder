@@ -13,7 +13,7 @@ final class ClassList implements \Stringable, \Countable
 	 */
 	public function __construct (string $classes = "")
 	{
-		foreach (\preg_split("~\s+~", $classes) as $class)
+		foreach ((\preg_split("~\\s+~", $classes) ?: []) as $class)
 		{
 			$this->add($class);
 		}

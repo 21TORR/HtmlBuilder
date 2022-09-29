@@ -3,8 +3,6 @@
 namespace Torr\HtmlBuilder\Node;
 
 use Torr\HtmlBuilder\Exception\InvalidAttributeNameException;
-use Torr\HtmlBuilder\Exception\InvalidAttributeValueException;
-use Torr\HtmlBuilder\Exception\UnexpectedTypeException;
 
 final class HtmlAttributes
 {
@@ -35,7 +33,7 @@ final class HtmlAttributes
 		{
 			throw new InvalidAttributeNameException(\sprintf(
 				"The attribute name '%s' is invalid.",
-				$name
+				$name,
 			));
 		}
 
@@ -112,7 +110,6 @@ final class HtmlAttributes
 	}
 
 	/**
-	 * @param self|array $value
 	 */
 	public static function fromValue (self|array $value) : self
 	{

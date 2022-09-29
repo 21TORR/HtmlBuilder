@@ -4,8 +4,6 @@ namespace Tests\Torr\HtmlBuilder\Node;
 
 use PHPUnit\Framework\TestCase;
 use Torr\HtmlBuilder\Exception\InvalidAttributeNameException;
-use Torr\HtmlBuilder\Exception\InvalidAttributeValueException;
-use Torr\HtmlBuilder\Exception\UnexpectedTypeException;
 use Torr\HtmlBuilder\Node\HtmlAttributes;
 
 final class HtmlAttributesTest extends TestCase
