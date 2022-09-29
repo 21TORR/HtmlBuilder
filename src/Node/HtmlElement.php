@@ -35,7 +35,11 @@ final class HtmlElement
 	 * @param HtmlAttributes|array               $attributes
 	 * @param Array<self|SafeMarkup|scalar|null> $content
 	 */
-	public function __construct (string $tagName, $attributes = [], array $content = [])
+	public function __construct (
+		string $tagName,
+		HtmlAttributes|array $attributes = [],
+		array $content = [],
+	)
 	{
 		if (!$this->isValidName($tagName))
 		{
@@ -80,6 +84,12 @@ final class HtmlElement
 		return $this->empty;
 	}
 
+	/**
+	 */
+	public function getClassList () : ClassList
+	{
+		return $this->attributes->getClassList();
+	}
 
 	/**
 	 * @param scalar|self|SafeMarkup|null $value
@@ -122,7 +132,7 @@ final class HtmlElement
 
 
 	/**
-	 * Returns whether the an element with the given tag name is empty
+	 * Returns whether an element with the given tag name is empty
 	 */
 	public static function isEmptyElement (string $tagName) : bool
 	{
