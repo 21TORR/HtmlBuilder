@@ -48,25 +48,38 @@ final class HtmlAttributesTest extends TestCase
 		self::assertSame("test", $attr->get("a"));
 
 		$attr->set("a", null);
-		self::assertSame(null, $attr->get("a"));
+		self::assertNull($attr->get("a"));
+	}
+
+	public function testSetAndGetWithClass ()
+	{
+		$attr = new HtmlAttributes(["class" => "test   abc"]);
+
+		self::assertSame("test abc", $attr->get("class"));
+
+		$attr->set("class", "test");
+		self::assertSame("test", $attr->get("class"));
+
+		$attr->set("class", null);
+		self::assertNull($attr->get("class"));
 	}
 
 	/**
 	 *
 	 */
-	public function testInvalidAttributeName ()
+	public function provideInvalidAttributeName () : iterable
+	{
+		yield "empty string" => [""];
+		yield "only space" => [" "];
+	}
+
+	/**
+	 * @dataProvider provideInvalidAttributeName
+	 */
+	public function testInvalidAttributeName (mixed $name) : void
 	{
 		$this->expectException(InvalidAttributeNameException::class);
-		new HtmlAttributes([" " => 1]);
-	}
-
-	/**
-	 *
-	 */
-	public function testInvalidAttributeValue ()
-	{
-		$this->expectException(InvalidAttributeValueException::class);
-		new HtmlAttributes(["a" => new \stdClass()]);
+		new HtmlAttributes([$name => 1]);
 	}
 
 
@@ -97,14 +110,5 @@ final class HtmlAttributesTest extends TestCase
 		yield [false];
 		yield [1];
 		yield ["test"];
-	}
-
-	/**
-	 * @dataProvider provideFromValueInvalid
-	 */
-	public function testFromValueInvalid ($value) : void
-	{
-		$this->expectException(UnexpectedTypeException::class);
-		HtmlAttributes::fromValue($value);
 	}
 }

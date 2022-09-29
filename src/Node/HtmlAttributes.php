@@ -9,9 +9,14 @@ use Torr\HtmlBuilder\Exception\UnexpectedTypeException;
 final class HtmlAttributes
 {
 	private array $attributes = [];
+	private ClassList $classList;
 
+	/**
+	 */
 	public function __construct (array $attributes = [])
 	{
+		$this->classList = new ClassList();
+
 		foreach ($attributes as $name => $value)
 		{
 			$this->set($name, $value);
@@ -22,11 +27,9 @@ final class HtmlAttributes
 	/**
 	 * Sets an attribute value
 	 *
-	 * @param scalar $value
-	 *
 	 * @return $this
 	 */
-	public function set (string $name, $value) : self
+	public function set (string $name, int|float|string|bool|null $value) : self
 	{
 		if (!$this->isValidName($name))
 		{
@@ -36,12 +39,9 @@ final class HtmlAttributes
 			));
 		}
 
-		if (null !== $value && !\is_scalar($value))
+		if ("class" === $name)
 		{
-			throw new InvalidAttributeValueException(\sprintf(
-				"The attribute value of type '%s' is invalid, only scalars and null are allowed.",
-				\is_object($value) ? \get_class($value) : \gettype($value)
-			));
+			$this->classList = new ClassList((string) $value);
 		}
 
 		$this->attributes[$name] = $value;
@@ -55,8 +55,18 @@ final class HtmlAttributes
 	 *
 	 * @return scalar|null
 	 */
-	public function get (string $name, $defaultValue = null)
+	public function get (
+		string $name,
+		int|float|string|bool|null $defaultValue = null,
+	) : int|float|string|bool|null
 	{
+		if ("class" === $name)
+		{
+			return 0 < \count($this->classList)
+				? (string) $this->classList
+				: null;
+		}
+
 		return $this->has($name)
 			? $this->attributes[$name]
 			: $defaultValue;
@@ -67,6 +77,11 @@ final class HtmlAttributes
 	 */
 	public function has (string $name) : bool
 	{
+		if ("class" === $name)
+		{
+			return 0 < \count($this->classList);
+		}
+
 		return \array_key_exists($name, $this->attributes);
 	}
 
@@ -75,7 +90,14 @@ final class HtmlAttributes
 	 */
 	public function all () : array
 	{
-		return $this->attributes;
+		$result = $this->attributes;
+
+		if (0 < \count($this->classList))
+		{
+			$result["class"] = (string) $this->classList;
+		}
+
+		return $result;
 	}
 
 	/**
@@ -86,28 +108,23 @@ final class HtmlAttributes
 	private function isValidName (string $name) : bool
 	{
 		return "" !== $name
-			? !\preg_match('~[ \\x{0000}-\\x{001F}\\x{0080}-\\x{009F}"\'<>/=]~u', $name)
-			: false;
+			&& !\preg_match('~[ \\x{0000}-\\x{001F}\\x{0080}-\\x{009F}"\'<>/=]~u', $name);
 	}
 
 	/**
 	 * @param self|array $value
 	 */
-	public static function fromValue ($value) : self
+	public static function fromValue (self|array $value) : self
 	{
-		if ($value instanceof self)
-		{
-			return $value;
-		}
+		return $value instanceof self
+			? $value
+			: new self($value);
+	}
 
-		if (\is_array($value))
-		{
-			return new self($value);
-		}
-
-		throw new UnexpectedTypeException(\sprintf(
-			"Can't create attributes from value of type '%s'",
-			\is_object($value) ? \get_class($value) : \gettype($value)
-		));
+	/**
+	 */
+	public function getClassList () : ClassList
+	{
+		return $this->classList;
 	}
 }
