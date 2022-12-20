@@ -2,6 +2,7 @@
 
 namespace Torr\HtmlBuilder\Node;
 
+use Torr\HtmlBuilder\Exception\InvalidStructureException;
 use Torr\HtmlBuilder\Exception\InvalidTagNameException;
 use Torr\HtmlBuilder\Exception\NoContentAllowedException;
 use Torr\HtmlBuilder\Text\SafeMarkup;
@@ -29,6 +30,7 @@ final class HtmlElement
 	private bool $empty;
 	private HtmlAttributes $attributes;
 	private array $content = [];
+	private ?self $parent = null;
 
 	/**
 	 * @param array<self|SafeMarkup|scalar|null> $content
@@ -118,6 +120,11 @@ final class HtmlElement
 			return $this;
 		}
 
+		if ($value instanceof self)
+		{
+			$value->setParent($this);
+		}
+
 		$this->content[] = $value;
 		return $this;
 	}
@@ -137,5 +144,24 @@ final class HtmlElement
 	private function isValidName (string $name) : bool
 	{
 		return 0 !== \preg_match('~^[a-z](-?[a-z0-9]+)*$~i', $name);
+	}
+
+	/**
+	 */
+	private function setParent (self $parent) : void
+	{
+		if (null !== $this->parent)
+		{
+			throw new InvalidStructureException("Can't add item as content to the other item, as it already has a parent");
+		}
+
+		$this->parent = $parent;
+	}
+
+	/**
+	 */
+	public function getParent () : ?self
+	{
+		return $this->parent;
 	}
 }
