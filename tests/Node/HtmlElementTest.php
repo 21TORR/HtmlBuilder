@@ -3,6 +3,7 @@
 namespace Tests\Torr\HtmlBuilder\Node;
 
 use PHPUnit\Framework\TestCase;
+use Torr\HtmlBuilder\Exception\InvalidStructureException;
 use Torr\HtmlBuilder\Exception\InvalidTagNameException;
 use Torr\HtmlBuilder\Exception\NoContentAllowedException;
 use Torr\HtmlBuilder\Node\HtmlAttributes;
@@ -91,5 +92,30 @@ final class HtmlElementTest extends TestCase
 
 		$element = new HtmlElement($tagName, [], ["test"]);
 		self::assertSame($shouldBeEmpty, $element->isEmpty());
+	}
+
+	/**
+	 *
+	 */
+	public function testParent () : void
+	{
+		$item = new HtmlElement("li");
+		self::assertNull($item->getParent());
+
+		$parent = new HtmlElement("ul");
+		$parent->append($item);
+		self::assertSame($parent, $item->getParent());
+	}
+
+	/**
+	 *
+	 */
+	public function testInvalidParent () : void
+	{
+		$this->expectException(InvalidStructureException::class);
+
+		$item = new HtmlElement("li");
+		new HtmlElement("ul", content: [$item]);
+		new HtmlElement("ul", content: [$item]);
 	}
 }

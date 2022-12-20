@@ -1,3 +1,9 @@
+2.1.0
+=====
+
+* (feature) Add way to get the parent element.
+
+
 2.0.0
 =====
 
